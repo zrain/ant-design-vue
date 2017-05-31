@@ -1,15 +1,18 @@
-<style lang="less">
+<style lang="less" scoped>
 	.demo-container {
 		padding-bottom: 80px;
-	}
-	p {
-		margin: 10px 0;
-		width: 466px;
-		padding: 0 20px;
+		p {
+			margin: 10px 0;
+			padding: 0 20px;
+		}
+		h4 {
+			margin: 10px 0;
+		}
 	}
 	.api-table {
+		width: 100%;
+		margin: 20px 0;
 		text-align: left;
-		margin-left: 10px;
 		border-top: 1px solid #eee;
 		border-left: 1px solid #eee;
 		th {
@@ -261,7 +264,7 @@
 		},
 		methods: {
 			enterLoading () {
-				this.loading = true;
+				this.loading = !this.loading;
 			},
 			enterIconLoading () {
 				this.iconLoading = true;

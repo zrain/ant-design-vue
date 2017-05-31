@@ -1,5 +1,7 @@
+<style lang="less" src="./style/index.less"></style>
+
 <template>
-	<div :class="classes" :style="styles">
+	<div :class="classes">
 	    <slot></slot>
 	</div>
 </template>
@@ -17,54 +19,67 @@
             offset: [Number, String],
             push: [Number, String],
             pull: [Number, String],
-            xs: [Number, Object],
-            sm: [Number, Object],
-            md: [Number, Object],
-            lg: [Number, Object],
-            xl: [Number, Object],
+            xs: [Number, Object, String],
+            sm: [Number, Object, String],
+            md: [Number, Object, String],
+            lg: [Number, Object, String],
+            xl: [Number, Object, String],
+            className: String,
         },
         computed: {
             classes () {
-            	let { span, order, offset, push, pull, xs, md, lg, xl } = this;
+            	let { span, order, offset, push, pull, xs, md, lg, xl, className } = this;
+                
+                let sizeClassObj = {};
+
+                ['xs', 'sm', 'md', 'lg', 'xl'].forEach( size => {
+                    let sizeProps = {};
+                    let type = typeof this[size];
+                    switch( type ){
+                        case 'string':
+                            sizeProps.span = parseInt( this[size] );
+                            break;
+                        case 'number':
+                            sizeProps.span = this[size];
+                            break;
+                        case 'object':
+                            sizeProps = this[size] || {};
+                            break;
+                        default: 
+                            break;
+                    }
+                    // if (typeof this[size] === 'string'){
+                    //     sizeProps.span = parseInt( this[size] );
+                    // }
+                    // if (typeof this[size] === 'number') {
+                    //     sizeProps.span = this[size];
+                    // } else if (typeof this[size] === 'object') {
+                    //     sizeProps = this[size] || {};
+                    // }
+
+                    sizeClassObj = Object.assign({}, sizeClassObj, {
+                      [`${prefixCls}-${size}-${sizeProps.span}`]: sizeProps.span !== undefined,
+                      [`${prefixCls}-${size}-order-${sizeProps.order}`]: sizeProps.order || sizeProps.order === 0,
+                      [`${prefixCls}-${size}-offset-${sizeProps.offset}`]: sizeProps.offset || sizeProps.offset === 0,
+                      [`${prefixCls}-${size}-push-${sizeProps.push}`]: sizeProps.push || sizeProps.push === 0,
+                      [`${prefixCls}-${size}-pull-${sizeProps.pull}`]: sizeProps.pull || sizeProps.pull === 0,
+                    });
+                });
+
                 let classList = [
-                    `${prefixCls}`,
                     {
-                        [`${prefixCls}-span-${span}`]: span,
+                        [`${prefixCls}-${span}`]: span !== undefined,
                         [`${prefixCls}-order-${order}`]: order,
                         [`${prefixCls}-offset-${offset}`]: offset,
                         [`${prefixCls}-push-${push}`]: push,
                         [`${prefixCls}-pull-${pull}`]: pull
-                    }
+                    },
+                    className,
+                    sizeClassObj,
                 ];
 
-                ['xs', 'sm', 'md', 'lg'].forEach(size => {
-                    if (typeof this[size] === 'number') {
-                        classList.push(`${prefixCls}-span-${size}-${this[size]}`);
-                    } else if (typeof this[size] === 'object') {
-                        let props = this[size];
-                        Object.keys(props).forEach(prop => {
-                            classList.push(
-                                prop !== 'span'
-                                    ? `${prefixCls}-${size}-${prop}-${props[prop]}`
-                                    : `${prefixCls}-span-${size}-${props[prop]}`
-                            );
-                        });
-                    }
-                });
-
                 return classList;
-            },
-            styles () {
-                let style = {};
-                if (this.gutter !== 0) {
-                    style = {
-                        paddingLeft: this.gutter / 2 + 'px',
-                        paddingRight: this.gutter / 2 + 'px'
-                    };
-                }
-
-                return style;
             }
-        },
+        }
 	}
 </script>

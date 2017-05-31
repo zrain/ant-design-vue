@@ -1,4 +1,4 @@
-<style>
+<style lang="less">
 	.container {
 		width: 800px;
 		margin: 60px auto 0;

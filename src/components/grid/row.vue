@@ -49,8 +49,9 @@
 				];
 			},
 			styles () {
+				let { gutter } = this;
 				let style = {};
-				if (this.gutter > 0) {
+				if (gutter > 0) {
 				    style = {
 				        marginLeft: this.gutter / -2 + 'px',
 				        marginRight: this.gutter / -2 + 'px'
@@ -59,8 +60,34 @@
 				return style;
 			}
 		},
+		methods: {
+			getColStyles () {
+			    let style = {};
+			    if (this.gutter !== 0) {
+			        style = {
+			            paddingLeft: this.gutter / 2 + 'px',
+			            paddingRight: this.gutter / 2 + 'px'
+			        };
+			    }
+			    return style;
+			},
+			updateGutter () {
+				if( this.gutter <= 0 ){
+					return;
+				}
+				let colStyles = this.getColStyles();
+				let cols = this.$children.map(( children ) => {
+					for( let key in colStyles ){
+						children.$el.style[key] = colStyles[key];
+					}
+				})
+			},
+		},
+		updated () {
+			this.updateGutter();
+		},
 		mounted () {
-
+			this.updateGutter();
 		},
 	}
 </script>

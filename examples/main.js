@@ -1,8 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import './assets/css/reset.css';
-
 import App from './routers/app.vue';
 
 import Antd from '../src/components';
