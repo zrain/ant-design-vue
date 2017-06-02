@@ -22,6 +22,9 @@
 				<li>
 					<router-link to="/grid">Grid</router-link>
 				</li>
+				<li>
+					<router-link to="/input">Input</router-link>
+				</li>
 			</ul>
 		</nav>
 		<div class="router-view-container">

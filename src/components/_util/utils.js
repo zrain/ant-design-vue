@@ -33,3 +33,36 @@ export function classNames() {
 
 	return classes.join(' ');
 }
+
+export function omit(obj, keys) {
+
+	if (! typeof(obj) === 'object' ) return {};
+
+	keys = [].concat.apply([], [].slice.call(arguments, 1));
+	let last = keys[keys.length - 1];
+	let res = {},
+		fn;
+
+	if (typeof last === 'function') {
+		fn = keys.pop();
+	}
+
+	let isFunction = typeof fn === 'function';
+	if (!keys.length && !isFunction) {
+		return obj;
+	}
+
+	for(let key in obj) {
+		let value = obj[key];
+		if (keys.indexOf(key) === -1) {
+
+			if (!isFunction) {
+				res[key] = value;
+			} else if (fn(value, key, obj)) {
+				res[key] = value;
+			}
+		}
+	}
+	return res;
+	
+};

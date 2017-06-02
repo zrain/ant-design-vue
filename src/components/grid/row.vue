@@ -35,6 +35,12 @@
             },
             className: String
 		},
+		data () {
+			return {
+				oldChildrenNumber: 0,
+				oldGutterNumber: 0,
+			}
+		},
 		computed: {
 			classes () {
 				let { type, align, justify, className } = this;
@@ -72,15 +78,21 @@
 			    return style;
 			},
 			updateGutter () {
-				if( this.gutter <= 0 ){
+				if( this.gutter <= 0 && 
+					this.gutter == this.oldGutterNumber && 
+					this.$children.length == this.oldChildrenNumber ){
 					return;
 				}
 				let colStyles = this.getColStyles();
 				let cols = this.$children.map(( children ) => {
 					for( let key in colStyles ){
-						children.$el.style[key] = colStyles[key];
+						if( children.$el.style[key] != colStyles[key]){
+							children.$el.style[key] = colStyles[key];
+						}
 					}
 				})
+				this.oldChildrenNumber = this.$children.length;
+				this.oldGutterNumber = this.gutter;
 			},
 		},
 		updated () {

@@ -49,7 +49,8 @@
 			ghost: {
 				type: Boolean,
                 default: false
-			}
+			},
+			classNames: String
 		},
 		data() {
 			return {
@@ -62,8 +63,8 @@
 		},
 		computed: {
 			classes () {
-				let sizeCls = '';
-				switch ( this.size) {
+				let { type, shape, size, sizeCls='', showSlot, resultLoading, icon, clicked, ghost, classNames} = this;
+				switch ( size ) {
 				  case 'large':
 				    sizeCls = 'lg';
 				    break;
@@ -72,7 +73,6 @@
 				  default:
 				    break;
 				}
-				let { type, shape, showSlot, resultLoading, icon, clicked, ghost} = this;
 				return [
 				    `${prefixCls}`,
 				    {
@@ -83,7 +83,8 @@
 				        [`${prefixCls}-loading`]: resultLoading,
 				        [`${prefixCls}-clicked`]: clicked,
 				        [`${prefixCls}-background-ghost`]: ghost,
-				    }
+				    },
+				    classNames
 				];
 			}
 		},

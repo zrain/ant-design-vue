@@ -10,6 +10,23 @@
 			margin: 10px 0;
 		}
 	}
+	.api-table {
+		width: 100%;
+		margin: 20px 0;
+		text-align: left;
+		border-top: 1px solid #eee;
+		border-left: 1px solid #eee;
+		th {
+			font-weight: 400;
+		}
+		th,td {
+			padding: 5px 10px;
+			border-right: 1px solid #eee;
+			border-bottom: 1px solid #eee;
+		}
+	}
+
+	
 	.demo-container .ant-row-flex > div:not(.gutter-row):nth-child(odd), 
 	.demo-container .ant-row>div:not(.gutter-row):nth-child(odd) {
 	    background: rgba(0,160,233,.7);
@@ -35,21 +52,6 @@
 	}
 	.demo-flex {
 		background: #f5f5f5;
-	}
-	.api-table {
-		width: 100%;
-		margin: 20px 0;
-		text-align: left;
-		border-top: 1px solid #eee;
-		border-left: 1px solid #eee;
-		th {
-			font-weight: 400;
-		}
-		th,td {
-			padding: 5px 10px;
-			border-right: 1px solid #eee;
-			border-bottom: 1px solid #eee;
-		}
 	}
 </style>
 
@@ -82,10 +84,10 @@
 			<h4>区块间隔</h4>
 			<p>栅格常常需要和间隔进行配合，你可以使用 Row 的 gutter 属性，我们推荐使用 (16+8n)px 作为栅格间隔。</p>
 			<p>
-				<button @click="num++">Num++</button>
-				<button @click="num--">Num--</button>
-				<button @click="gutter = gutter + 10">Gutter10++</button>
-				<button @click="gutter = gutter - 10">Gutter10--</button>
+				<Button @click="num++">Num++</Button>
+				<Button @click="num--">Num--</Button>
+				<Button @click="gutter = gutter + 10">Gutter10++</Button>
+				<Button @click="gutter = gutter - 10">Gutter10--</Button>
 			</p>
 			<p>
 				<Row :gutter="gutter">

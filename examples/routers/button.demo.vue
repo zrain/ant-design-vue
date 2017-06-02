@@ -27,9 +27,14 @@
 </style>
 <template>
 	<div class="demo-container">
+		<h1>Button按钮</h1>
+		<p>按钮用于开始一个即时操作。</p>
+		<h2>何时使用</h2>
+		<p>标记了一个（或封装一组）操作命令，响应用户点击行为，触发相应的业务逻辑。</p>
+		<h2>代码演示</h2>
 		<section>
 			<h4>测试</h4>
-			<p>测试 class 属性, class/style 会直接继承到 button 原生HTML标签上</p>
+			<p>测试 class 属性, class/style 会直接继承到 button 原生HTML标签上, 但是class会前置</p>
 			<p>
 				<Button type="primary" class="test-classname" style="color:red;">Primary</Button>
 			</p>

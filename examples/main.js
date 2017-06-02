@@ -20,6 +20,10 @@ const routes = [
 		path: '/grid',
 		component: require('./routers/grid.demo.vue'),
 	},
+	{
+		path: '/input',
+		component: require('./routers/input.demo.vue'),
+	},
 ]
 
 const router = new VueRouter({

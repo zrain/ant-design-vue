@@ -19,12 +19,13 @@
 				validator (value) {
                     return oneOf(value, ['small', 'large', 'default']);
                 }
-			}
+			},
+			classNames: String,
 		},
 		computed: {
 			classes () {
 				let sizeCls = '';
-				let { size } = this;
+				let { size, classNames } = this;
 				switch (size) {
 				  case 'large':
 				    sizeCls = 'lg';
@@ -38,7 +39,8 @@
 					`${prefixCls}`,
 					{
 						[`${prefixCls}-${sizeCls}`]: sizeCls,
-					}
+					},
+					classNames
 				]
 			}
 		}
