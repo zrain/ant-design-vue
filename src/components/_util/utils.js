@@ -66,3 +66,7 @@ export function omit(obj, keys) {
 	return res;
 	
 };
+
+export function isArray( arr ) {    
+ 	return Object.prototype.toString.call( arr ) === '[object Array]';     
+}

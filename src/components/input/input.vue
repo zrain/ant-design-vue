@@ -1,7 +1,7 @@
 <style lang="less" src="./style/index.less"></style>
 
 <script>
-	import { oneOf } from '../_util/utils';
+	import { oneOf, isArray } from '../_util/utils';
 	import calculateTextareaHeight from './calculateTextareaHeight.js';
 
 	const prefixCls = 'ant-input';
@@ -88,15 +88,13 @@
 			handleInput( e ){
 				if( this.type === 'textarea' ){
 					this.handleTextareaChange( e );
-					return;
 				}
-				// this.$emit('input', e.target.value)
+				this.$emit('input', e.target.value)
 			},
 			renderInput( createElement ) {
 				let self = this;
-				let { type, placeholder, disabled, inputClassName, textareaStyles } = this;
+				let { value, type, placeholder, disabled, inputClassName, textareaStyles, style} = this;
 
-				let 
 				switch ( type ) {
 					case 'textarea':
 						return createElement(
@@ -108,6 +106,7 @@
 								attrs: {
 									placeholder: placeholder,
 									disabled: disabled,
+									value: value,
 								},
 								on: {
 								  	input: function (event) {
@@ -117,14 +116,16 @@
 							}
 						);
 					default:
-						return createElement(
+						return this.renderLabeledIcon( createElement, createElement(
 							'input', 
 							{
 								class: inputClassName,
 								ref: 'input',
+								style: style,
 								attrs: {
 									placeholder: placeholder,
-									disabled: disabled
+									disabled: disabled,
+									value: value,
 								},
 							    on: {
 							      	input: function (event) {
@@ -132,17 +133,38 @@
 							      	}
 							    }
 							}
-						);
+						) )
 				}
 				
 			},
+			renderChildren( slotsOrString ) {
+				let children = [];
+				if( typeof slotsOrString == 'string'){
+					children.push( slotsOrString );
+				}
+				if( isArray( slotsOrString )){
+					children = children.concat( slotsOrString );
+					for (let i = children.length - 1; i >= 0; i--) {
+						if (children[i].tag.indexOf('Icon') == -1) {
+							children.splice(i, 1);
+						}
+					}
+				}
+				return children;
+			},
 			renderLabeledInput( createElement, children ) {
+
 				let { type, addonBefore, addonAfter } = this;
 
-				// Not wrap when there is not addons
-				if (type === 'textarea' || (!addonBefore && !addonAfter)) {
-				  return children;
+				addonBefore = this.$slots.addonBefore || addonBefore;
+				addonAfter = this.$slots.addonAfter || addonAfter;
+
+				if( type == 'textarea' || ( !addonBefore && !addonAfter ) ){
+					return children;
 				}
+
+				let addonBeforeVNodeChildren = this.renderChildren( addonBefore );
+				let addonAfterVNodeChildren = this.renderChildren( addonAfter );
 
 				const wrapperClassName = `${prefixCls}-group`;
 				const addonClassName = `${wrapperClassName}-addon`;
@@ -152,9 +174,7 @@
 					{
 						class: addonClassName,
 					},
-					[
-						addonBefore
-					]
+					addonBeforeVNodeChildren
 				);
 
 				const addonAfterVnode = createElement(
@@ -162,9 +182,7 @@
 					{
 						class: addonClassName,
 					},
-					[
-						addonAfter
-					]
+					addonAfterVNodeChildren
 				);
 
 				const className = [
@@ -187,11 +205,55 @@
 				);
 			},
 			renderLabeledIcon( createElement, children ) {
+				let { type } = this;
 
+				let prefix = this.$slots ? this.$slots.prefix : null;
+				let suffix = this.$slots ? this.$slots.suffix : null;
+
+				if( type == 'textarea' || (!prefix && !suffix) ){
+					return children;
+				}
+
+				let prefixVNodeChildren = this.renderChildren( prefix );
+				let suffixVNodeChildren = this.renderChildren( suffix );
+
+				const prefixVnode = prefixVNodeChildren.length > 0 ? createElement(
+					'span',
+					{
+						class:{
+							[`${prefixCls}-prefix`]: true
+						}
+					},
+					prefixVNodeChildren
+				):null;
+
+				const suffixVnode = suffixVNodeChildren.length > 0 ? createElement(
+					'span',
+					{
+						class: {
+							[`${prefixCls}-suffix`]: true
+						}
+					},
+					suffixVNodeChildren
+				):null;
+
+				return createElement(
+			  		'span',
+			  		{
+			  			class: {
+			  				[`${prefixCls}-affix-wrapper`]: true,
+			  			}
+			  		},
+			  		[
+			  			prefixVnode,
+			  			children,
+			  			suffixVnode
+			  		]
+				);
 			},
 		},
 		render( createElement ) {
 			return this.renderLabeledInput(createElement, this.renderInput(createElement) );
-		}
+		},
 	}
 </script>

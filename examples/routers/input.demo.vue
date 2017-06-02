@@ -41,10 +41,16 @@
 			<h4>基本使用</h4>
 			<p>基本使用。</p>
 			<p>
-				<Input placeholder="Basic usage" />
+				<Input placeholder="Basic usage" v-model="inputValue" />
 			</p>
 			<p>
-				<Input placeholder="Basic usage" type="textarea" />
+				type:input 输入的值：{{inputValue}}
+			</p>
+			<p>
+				<Input placeholder="Basic usage" type="textarea" v-model="textareaValue"/>
+			</p>
+			<p>
+				type:textarea 输入的值： {{textareaValue}}
 			</p>
 		</section>
 		<section>
@@ -69,13 +75,51 @@
 				用于配置一些固定组合。
 			</p>
 			<p>
-				<Input addonBefore="Http://" addonAfter=".com" defaultValue="mysite" />
+				当前置/后置一些字符串文案时，
+				<br>
+				&lt;Input addonBefore=&quot;Http://&quot; addonAfter=&quot;.com&quot;/&gt;
 			</p>
 			<p>
-				<!-- <Input addonBefore={selectBefore} addonAfter={selectAfter} defaultValue="mysite" /> -->
+				<Input addonBefore="Http://" addonAfter=".com"/>
 			</p>
 			<p>
-				<!-- <Input addonAfter={<Icon type="setting" />} defaultValue="mysite" /> -->
+				<Input>
+					<Icon type="setting" slot="prefix" />
+					<Icon type="search" slot="suffix" />
+				</Input>
+			</p>
+			<p>
+				当前置/后置一些Dom结构时, 使用 slot="slotName"
+			</p>
+			<p>
+				&lt;Input&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;Icon type=&quot;setting&quot; slot=&quot;addonBefore&quot; /&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;Icon type=&quot;search&quot; slot=&quot;addonAfter&quot;/&gt;<br>
+				&lt;/Input&gt;<br>
+			</p>
+			<p>
+				soltName.indexOf('addon') != -1 的目前仅支持 &lt;Icon&gt; , 其他标签会被自动忽略
+			</p>
+			<p>
+				<Input v-model="username" placeholder="username">
+					<Icon type="user" slot="prefix"></Icon>
+					<Icon type="close-circle" slot="suffix" v-show="username.length > 0"></Icon>
+				</Input>
+			</p>
+			<p>
+				&lt;Input v-model=&quot;username&quot; placeholder=&quot;username&quot;&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;Icon type=&quot;user&quot; slot=&quot;prefix&quot;&gt;&lt;/Icon&gt;<br>
+				&nbsp;&nbsp;&nbsp;&nbsp;&lt;Icon type=&quot;close-circle&quot; slot=&quot;suffix&quot; v-show=&quot;username.length &gt; 0&quot;&gt;&lt;/Icon&gt;<br>
+				&lt;/Input&gt;<br>
+			</p>
+		</section>
+		<section>
+			<h4>前缀/后缀标签</h4>
+			<p>
+				在输入框内添加前缀或后缀图标。
+			</p>
+			<p>
+				
 			</p>
 		</section>
 		<section>
@@ -83,6 +127,31 @@
 			<p>用于多行输入，指定 type 为一个特殊的 textarea。</p>
 			<p>
 				<Input type="textarea" rows="4" />
+			</p>
+		</section>
+		<section>
+			<h4>输入框组合</h4>
+			<p>
+				输入框的组合展现。
+			</p>
+			<p>
+				注意：使用 compact 模式时，不需要通过 Col 来控制宽度。
+			</p>
+			<p>
+				<InputGroup size="large">
+				    <Col span="4">
+				        <Input value="0571" />
+				    </Col>
+				    <Col span="8">
+				        <Input value="26888888" />
+				    </Col>
+				</InputGroup>
+			</p>
+			<p>
+				<InputGroup compact>
+				    <Input style="width:20%" value="0571" class="lalal"/>
+				    <Input style="width:30%" value="26888888" />
+				</InputGroup>
 			</p>
 		</section>
 		<section>
@@ -115,6 +184,9 @@
 		data() {
 			return {
 				disabled: false,
+				inputValue: 'test inputValue',
+				textareaValue: 'test textareaValue',
+				username: ''
 			}
 		}
 	}
