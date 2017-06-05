@@ -2,6 +2,7 @@ import { Button, ButtonGroup } from './button';
 import Icon from './icon';
 import { Row, Col } from './grid';
 import { Input, InputGroup } from './input';
+import { Layout, Header, Footer, Content, Sider } from './layout';
 
 const Antd = {
 	Button,
@@ -11,6 +12,11 @@ const Antd = {
 	Col,
 	Input,
 	InputGroup,
+	Layout,
+	Header,
+	Footer,
+	Content,
+	Sider
 }
 
 const install = ( vue ) => {

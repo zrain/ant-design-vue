@@ -25,6 +25,9 @@
 				<li>
 					<router-link to="/input">Input</router-link>
 				</li>
+				<li>
+					<router-link to="/layout">Layout</router-link>
+				</li>
 			</ul>
 		</nav>
 		<div class="router-view-container">

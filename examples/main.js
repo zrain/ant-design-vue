@@ -24,6 +24,10 @@ const routes = [
 		path: '/input',
 		component: require('./routers/input.demo.vue'),
 	},
+	{
+		path: '/layout',
+		component: require('./routers/layout.demo.vue'),
+	},
 ]
 
 const router = new VueRouter({
