@@ -7,32 +7,35 @@
 		</div>
 		<!-- trigger == null? -->
 		<template v-if="collapsible || below">
-			<template v-if="trigger == null">
-				<div :class="triggerClasses" @click="this.toggle = true">
-					<span v-if="trigger">{{trigger}}</span>
-					<template v-else>
-						<template v-if="collapsed">
-							<Icon v-if="reverseArrow" type="let" />
-							<Icon v-else type="right" />
-						</template>
+			<template v-if="trigger !== null || slot_trigger">
+				<template v-if="collapsedWidth === 0 || collapsedWidth === '0'" >
+					<span
+						:class="zeroWidthTriggerClasses"
+						@click="toggle()" 
+						
+					>
+						<Icon type="bars" />
+					</span>
+				</template>
+				<template v-else>
+					<div :class="triggerClasses" @click="toggle()">
+						<span v-if="trigger || slot_trigger">
+							<slot name="trigger">{{trigger}}</slot>
+						</span>
 						<template v-else>
-							<Icon v-if="reverseArrow" type="right" />
-							<Icon v-else type="left" />
+							<template v-if="scope_collapsed">
+								<Icon v-if="reverseArrow" type="let" />
+								<Icon v-else type="right" />
+							</template>
+							<template v-else>
+								<Icon v-if="reverseArrow" type="right" />
+								<Icon v-else type="left" />
+							</template>
 						</template>
-					</template>
-				</div>
-			</template>
-			<template v-else>
-				<span
-					:class="zeroWidthTriggerClasses"
-					@click="this.toggle = true" 
-					v-if="collapsedWidth === 0 || collapsedWidth === '0'" 
-				>
-				  <Icon type="bars" />
-				</span>
+					</div>
+				</template>
 			</template>
 		</template>
-		
 	</div>
 </template>
 
@@ -40,26 +43,6 @@
 	import { oneOf } from '../_util/utils';
 
 	const prefixCls = 'ant-layout-sider';
-
-	// if (typeof window !== 'undefined') {
-	//   	const matchMediaPolyfill = function matchMediaPolyfill(mediaQuery: string): MediaQueryList {
-	//     	return {
-	//       		media: mediaQuery,
-	//       		matches: false,
-	//       		addListener() {},
-	//       		removeListener() {},
-	//     	};
-	//   	};
-	//   	window.matchMedia = window.matchMedia || matchMediaPolyfill;
-	// }
-
-	// const dimensionMap = {
-	//   	xs: '480px',
-	//   	sm: '768px',
-	//   	md: '992px',
-	//   	lg: '1200px',
-	//   	xl: '1600px',
-	// };
 
 	export default {
 		name: 'Sider',
@@ -101,44 +84,75 @@
 			return {
 				below: false,
 				siderWidth: 0,
-				toggle: true,
 				reverseArrow: false,
+				scope_collapsed: false,
+				slot_trigger: false,
 			}
 		},
 		methods: {
-			preHanlderSiderWidth() {
-				let { collapsed, collapsedWidth, width } = this;
-				this.siderWidth = collapsed ? collapsedWidth : width;
-			},
 			preHanlderCollapsed() {
-				let collapsed;
+				let scope_collapsed;
 				if ('collapsed' in this) {
-				  collapsed = this.collapsed;
+				  scope_collapsed = this.collapsed;
 				} else {
-				  collapsed = this.defaultCollapsed;
+				  scope_collapsed = this.defaultCollapsed;
 				}
-				this.collapsed = collapsed;
+				this.scope_collapsed = scope_collapsed;
 				this.below = false;
-			}
+			},
+			preHanlderSiderWidth() {
+				let { scope_collapsed, collapsedWidth, width } = this;
+				this.siderWidth = scope_collapsed ? collapsedWidth : width;
+			},
+			setCollapsed(collapsed, type) {
+				const { onCollapse } = this;
+				if (onCollapse && typeof onCollapse === 'function' ) {
+					onCollapse(collapsed, type);
+				}
+			},
+			toggle() {
+			  	const scope_collapsed = !this.scope_collapsed;
+			  	this.setCollapsed(scope_collapsed, 'clickTrigger');
+			},
+		},
+		updated() {
+			// 1.
+			this.preHanlderCollapsed();
+			// 2.
+			this.preHanlderSiderWidth();
 		},
 		beforeMount() {
-			this.preHanlderSiderWidth();
+			// 1.
 			this.preHanlderCollapsed();
+			// 2.
+			this.preHanlderSiderWidth();
+
+			// 判断是否有 trigger slot 
+			if ( this.$slots && this.$slots.trigger ) {
+				this.slot_trigger = true;
+			}
 		},
 		computed: {
 			classes() {
-				let { below, trigger, collapsed, collapsedWidth, width, className, siderWidth } = this;
+				let { below, trigger, scope_collapsed, collapsedWidth, width, className, siderWidth } = this;
 
 				return [
 					`${prefixCls}`,
 					{
-						[`${prefixCls}-collapsed`]: !!collapsed,
+						[`${prefixCls}-collapsed`]: !!scope_collapsed,
 						[`${prefixCls}-has-trigger`]: !!trigger,
 						[`${prefixCls}-below`]: !!below,
 						[`${prefixCls}-zero-width`]: siderWidth === 0 || siderWidth === '0',
 						[`${className}`]: className
 					},
 				]
+			},
+			styles() {
+				let { siderWidth } = this;
+				return {
+					flex: `0 0 ${siderWidth}px`,
+					width: `${siderWidth}px`,
+				}
 			},
 			childrenClasses() {
 				return [
@@ -155,16 +169,6 @@
 					`${prefixCls}-zero-width-trigger`
 				]
 			},
-			styles() {
-				let { siderWidth } = this;
-				return {
-					flex: `0 0 ${siderWidth}px`,
-					width: `${siderWidth}px`,
-				}
-			}
 		},
-		mounted() {
-			// console.info( this.collapsible )
-		}
 	}
 </script>

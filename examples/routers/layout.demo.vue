@@ -125,7 +125,11 @@
 
 		<section>
 			<Layout>
-				<Sider collapsible :collapsed="collapsed" :onCollapse="onCollapse">
+				<Sider 
+					collapsible 
+					:collapsed="collapsed" 
+					:onCollapse="onCollapse"
+				>
 					<div class="logo-2"></div>
 				</Sider>
 				<Layout>
@@ -154,7 +158,7 @@
 		},
 		methods: {
 			onCollapse() {
-				// this.collapsed = !this.collapsed;
+				this.collapsed = !this.collapsed;
 			}
 		}
 	}
