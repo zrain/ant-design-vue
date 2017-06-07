@@ -3,13 +3,15 @@ import VueRouter from 'vue-router';
 
 import App from './routers/app.vue';
 
-import Antd from '../src/components';
+import Ant_Design_Vue from '../src/components';
 
 import '../src/components/style/index.less';
 
+import './assets/css/common.less';
+
 Vue.use(VueRouter);
 
-Vue.use(Antd);
+Vue.use(Ant_Design_Vue);
 
 const routes = [
 	{
@@ -27,6 +29,10 @@ const routes = [
 	{
 		path: '/layout',
 		component: require('./routers/layout.demo.vue'),
+	},
+	{
+		path: '/menu',
+		component: require('./routers/menu.demo.vue'),
 	},
 ]
 

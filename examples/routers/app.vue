@@ -1,39 +1,54 @@
-<style lang="less">
-	.container {
-		width: 800px;
-		margin: 60px auto 0;
+<style lang="less" scoped>
+	.layout {
+		min-height: 100vh;
 	}
-	.router-view-container {
-		padding: 20px 0;
+	.header {
+		background-color: #fff;
+		transition: opacity .5s;
+	    height: 80px;
+	    margin-bottom: 24px;
+	    padding: 0 48px;
 	}
-	html {
-    	-webkit-font-smoothing: antialiased;
-    	-moz-osx-font-smoothing: grayscale;
-    }
+	.content {
+		margin: 0 48px;
+	    border-radius: 4px;
+	    padding: 24px 0 0;
+	    margin-bottom: 24px;
+	    background: #fff;
+	    position: relative;
+	}
 </style>
 
 <template>
-	<div class="container">
-		<nav>
-			<ul>
-				<li>
-					<router-link to="/button">Button</router-link>
-				</li>
-				<li>
-					<router-link to="/grid">Grid</router-link>
-				</li>
-				<li>
-					<router-link to="/input">Input</router-link>
-				</li>
-				<li>
-					<router-link to="/layout">Layout</router-link>
-				</li>
-			</ul>
-		</nav>
-		<div class="router-view-container">
+	<Layout class="layout">
+		<Header class="header">
+			
+		</Header>
+		<Content class="content">
+			<nav>
+				<ul>
+					<li>
+						<router-link to="/button">Button</router-link>
+					</li>
+					<li>
+						<router-link to="/grid">Grid</router-link>
+					</li>
+					<li>
+						<router-link to="/input">Input</router-link>
+					</li>
+					<li>
+						<router-link to="/layout">Layout</router-link>
+					</li>
+					<li>
+						<router-link to="/menu">Menu</router-link>
+					</li>
+				</ul>
+			</nav>
 			<router-view></router-view>
-		</div>
-	</div>
+			
+		</Content>
+		<Footer></Footer>
+	</Layout>
 </template>
 
 <script>

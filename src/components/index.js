@@ -3,6 +3,7 @@ import Icon from './icon';
 import { Row, Col } from './grid';
 import { Input, InputGroup } from './input';
 import { Layout, Header, Footer, Content, Sider } from './layout';
+import { Menu, MenuItem, SubMenu, MenuItemGroup } from './menu';
 
 const Antd = {
 	Button,
@@ -16,7 +17,11 @@ const Antd = {
 	Header,
 	Footer,
 	Content,
-	Sider
+	Sider,
+	Menu,
+	MenuItem,
+	SubMenu,
+	MenuItemGroup
 }
 
 const install = ( vue ) => {
