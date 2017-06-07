@@ -25,6 +25,11 @@ module.exports = {
 								css: 'vue-style-loader!css-loader',
 								less: 'vue-style-loader!css-loader!less-loader'
 							},
+							postcss: [
+								require('autoprefixer')({
+									broswers: ['last 5 versions'],
+								})
+							]
 						}
 					}
 				]
@@ -35,7 +40,18 @@ module.exports = {
 			    use: {
 			        loader: 'babel-loader',
 			        options: {
-			          presets: ['env'],
+			          	presets: [
+			          		'env',
+			          		[
+			          			"es2015", 
+			          			{
+								    "modules": false
+								}
+							],
+						],
+						plugins: [
+							'transform-runtime',
+						]
 			        }
 			    },
 			},
@@ -46,11 +62,11 @@ module.exports = {
 				  	'css-loader',
 				  	{
 				  		loader: 'postcss-loader',
-				  		options: {
-				  			config: {
-				  				path: './postcss.config.js'
-				  			}
-				  		}
+				  		// options: {
+				  		// 	config: {
+				  		// 		// path: './postcss.config.js'
+				  		// 	}
+				  		// }
 				  	}
 				]
 			},
