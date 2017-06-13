@@ -9,23 +9,26 @@
 <script>
 	import { oneOf } from '../_util/utils';
 
-	const prefixCls = 'ant-btn-group'
-
 	export default {
 		name: 'ButtonGroup',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-btn-group',
+			},
 			size: {
 				type: String,
 				validator (value) {
                     return oneOf(value, ['small', 'large', 'default']);
                 }
 			},
-			classNames: String,
+			className: String,
 		},
 		computed: {
 			classes () {
+				let { prefixCls, size, className } = this;
 				let sizeCls = '';
-				let { size, classNames } = this;
+
 				switch (size) {
 				  case 'large':
 				    sizeCls = 'lg';
@@ -35,12 +38,13 @@
 				  default:
 				    break;
 				}
+				
 				return [
 					`${prefixCls}`,
 					{
 						[`${prefixCls}-${sizeCls}`]: sizeCls,
+						[`${className}`]: !!className
 					},
-					classNames
 				]
 			}
 		}

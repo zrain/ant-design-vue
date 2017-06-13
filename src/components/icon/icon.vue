@@ -9,15 +9,17 @@
 		name: 'Icon',
 		props: {
 			type: String,
-			spin: Boolean
+			spin: Boolean,
+			className: String
 		},
 		computed: {
 			classes () {
-				let { spin, type } = this;
+				let { spin, type, className } = this;
 				return [
                     `anticon`,
                     {
                         ['anticon-spin']: !!spin || type === 'loading',
+                        ['${className}']: !!className
                     },
                     `anticon-${type}`
                 ]

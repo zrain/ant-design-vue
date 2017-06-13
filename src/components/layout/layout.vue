@@ -8,11 +8,13 @@
 
 <script>
 
-	const prefixCls = 'ant-layout';
-
 	export default {
 		name: 'Layout',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-layout',
+			},
 			className: String,
 		},
 		data() {
@@ -22,12 +24,12 @@
 		},
 		computed: {
 			classes() {
-				let { hasSider, className } = this;
+				let { prefixCls, hasSider, className } = this;
 				return [
 					`${prefixCls}`,
 					{
 						[`${prefixCls}-has-sider`]: hasSider,
-						[`${className}`]: className
+						[`${className}`]: !!className
 					},
 				]
 			}

@@ -10,17 +10,18 @@
 			<template slot="title">
 				<Icon type="setting"/> Navigation Three - Submenu
 			</template>
-			<!-- <MenuItemGroup title="Item 1"> -->
-	            <MenuItem>Option 1</MenuItem>
-	            <MenuItem>Option 2</MenuItem>
-	        <!-- </MenuItemGroup> -->
-	        <!-- <MenuItemGroup title="Item 2"> -->
-	            <MenuItem>Option 3</MenuItem>
-	            <MenuItem>Option 4</MenuItem>
-	        <!-- </MenuItemGroup> -->
+			<MenuItemGroup title="Item 1">
+	            <MenuItem name="1">Option 1</MenuItem>
+	            <MenuItem name="2">Option 2</MenuItem>
+	        </MenuItemGroup>
+	        <MenuItemGroup title="Item 2">
+	            <MenuItem name="3">Option 3</MenuItem>
+	            <MenuItem name="4">Option 4</MenuItem>
+	        </MenuItemGroup>
 		</SubMenu>
-		<!-- <MenuItem name="test" value="test">测试</MenuItem> -->
-		<!-- <MenuItem v-for="i in 3" :key="i">测试</MenuItem> -->
+		<MenuItem key="alipay">
+			<a href="https://ant.design" target="_blank" rel="noopener noreferrer">Navigation Four - Link</a>
+		</MenuItem>
 	</Menu>
 </template>
 

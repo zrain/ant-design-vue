@@ -15,25 +15,36 @@ Vue.use(Ant_Design_Vue);
 
 const routes = [
 	{
-		path: '/button',
-		component: require('./routers/button.demo.vue'),
+		path: '/components',
+		component: require('./routers/components.demo.vue'),
+		children: [
+			{
+				path: 'button',
+				component: require('./routers/button.demo.vue'),
+			},
+			{
+				path: 'grid',
+				component: require('./routers/grid.demo.vue'),
+			},
+			{
+				path: 'input',
+				component: require('./routers/input.demo.vue'),
+			},
+			{
+				path: 'layout',
+				component: require('./routers/layout.demo.vue'),
+			},
+			{
+				path: 'menu',
+				component: require('./routers/menu.demo.vue'),
+			},
+			{
+				path: 'domalign',
+				component: require('./routers/domAlign.demo.vue'),
+			},
+		]
 	},
-	{
-		path: '/grid',
-		component: require('./routers/grid.demo.vue'),
-	},
-	{
-		path: '/input',
-		component: require('./routers/input.demo.vue'),
-	},
-	{
-		path: '/layout',
-		component: require('./routers/layout.demo.vue'),
-	},
-	{
-		path: '/menu',
-		component: require('./routers/menu.demo.vue'),
-	},
+	
 ]
 
 const router = new VueRouter({

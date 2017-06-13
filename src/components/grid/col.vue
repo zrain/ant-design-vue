@@ -14,6 +14,10 @@
 	export default {
 		name: 'Col',
 		props: {
+            prefixCls: {
+                type: String,
+                default: 'ant-col',
+            },
             span: [Number, String],
             order: [Number, String],
             offset: [Number, String],
@@ -28,7 +32,7 @@
         },
         computed: {
             classes () {
-            	let { span, order, offset, push, pull, xs, md, lg, xl, className } = this;
+            	let { prefixCls, span, order, offset, push, pull, xs, md, lg, xl, className } = this;
                 
                 let sizeClassObj = {};
 
@@ -48,21 +52,12 @@
                         default: 
                             break;
                     }
-                    // if (typeof this[size] === 'string'){
-                    //     sizeProps.span = parseInt( this[size] );
-                    // }
-                    // if (typeof this[size] === 'number') {
-                    //     sizeProps.span = this[size];
-                    // } else if (typeof this[size] === 'object') {
-                    //     sizeProps = this[size] || {};
-                    // }
-
                     sizeClassObj = Object.assign({}, sizeClassObj, {
-                      [`${prefixCls}-${size}-${sizeProps.span}`]: sizeProps.span !== undefined,
-                      [`${prefixCls}-${size}-order-${sizeProps.order}`]: sizeProps.order || sizeProps.order === 0,
-                      [`${prefixCls}-${size}-offset-${sizeProps.offset}`]: sizeProps.offset || sizeProps.offset === 0,
-                      [`${prefixCls}-${size}-push-${sizeProps.push}`]: sizeProps.push || sizeProps.push === 0,
-                      [`${prefixCls}-${size}-pull-${sizeProps.pull}`]: sizeProps.pull || sizeProps.pull === 0,
+                        [`${prefixCls}-${size}-${sizeProps.span}`]: sizeProps.span !== undefined,
+                        [`${prefixCls}-${size}-order-${sizeProps.order}`]: sizeProps.order || sizeProps.order === 0,
+                        [`${prefixCls}-${size}-offset-${sizeProps.offset}`]: sizeProps.offset || sizeProps.offset === 0,
+                        [`${prefixCls}-${size}-push-${sizeProps.push}`]: sizeProps.push || sizeProps.push === 0,
+                        [`${prefixCls}-${size}-pull-${sizeProps.pull}`]: sizeProps.pull || sizeProps.pull === 0,
                     });
                 });
 
@@ -72,9 +67,9 @@
                         [`${prefixCls}-order-${order}`]: order,
                         [`${prefixCls}-offset-${offset}`]: offset,
                         [`${prefixCls}-push-${push}`]: push,
-                        [`${prefixCls}-pull-${pull}`]: pull
+                        [`${prefixCls}-pull-${pull}`]: pull,
+                        [`${className}`]: !!className
                     },
-                    className,
                     sizeClassObj,
                 ];
 

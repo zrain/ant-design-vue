@@ -8,20 +8,22 @@
 
 <script>
 
-	const prefixCls = 'ant-layout-footer';
-
 	export default {
 		name: 'Footer',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-layout-footer',
+			},
 			className: String,
 		},
 		computed: {
 			classes() {
-				let { className } = this;
+				let { prefixCls, className } = this;
 				return [
 					`${prefixCls}`,
 					{
-						[`${className}`]: className
+						[`${className}`]: !!className
 					},
 				]
 			}

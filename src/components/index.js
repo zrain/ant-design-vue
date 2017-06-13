@@ -1,11 +1,14 @@
 import { Button, ButtonGroup } from './button';
-import Icon from './icon';
+import { Icon } from './icon';
 import { Row, Col } from './grid';
 import { Input, InputGroup } from './input';
 import { Layout, Header, Footer, Content, Sider } from './layout';
 import { Menu, MenuItem, SubMenu, MenuItemGroup } from './menu';
+import { Dropdown } from './dropdown';
+import { Trigger } from './trigger';
+import { DomAlign } from './domAlign';
 
-const Antd = {
+const ANT_DESIGN_VUE = {
 	Button,
 	ButtonGroup,
 	Icon,
@@ -21,12 +24,15 @@ const Antd = {
 	Menu,
 	MenuItem,
 	SubMenu,
-	MenuItemGroup
+	MenuItemGroup,
+	Trigger,
+	Dropdown,
+	DomAlign
 }
 
 const install = ( vue ) => {
-	Object.keys(Antd).forEach((key) => {
-	    vue.component(key, Antd[key]);
+	Object.keys(ANT_DESIGN_VUE).forEach((key) => {
+	    vue.component(key, ANT_DESIGN_VUE[key]);
 	});
 }
 
@@ -35,4 +41,4 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
 
-module.exports = Object.assign(Antd, {install}); 
+module.exports = Object.assign(ANT_DESIGN_VUE, {install}); 

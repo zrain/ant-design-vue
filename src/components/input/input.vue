@@ -4,11 +4,13 @@
 	import { oneOf, isArray } from '../_util/utils';
 	import calculateTextareaHeight from './calculateTextareaHeight.js';
 
-	const prefixCls = 'ant-input';
-
 	export default {
 		name: 'Input',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-input',
+			},
 			type: {
 				type: String,
 				default: 'text',
@@ -51,19 +53,20 @@
 		},
 		computed: {
 			wrapperClass() {
+				let prefixCls = this.prefixCls;
 				return [
 					`${prefixCls}-wrapper`
 				]
 			},
 			inputClassName() {
-				let { size, className } = this;
+				let { prefixCls, size, className } = this;
 				return [
 					`${prefixCls}`,
 					{
 						[`${prefixCls}-sm`]: size === 'small',
 						[`${prefixCls}-lg`]: size === 'large',
+						[`${className}`]: !!className
 					},
-					className
 				]
 			}
 		},
@@ -154,7 +157,7 @@
 			},
 			renderLabeledInput( createElement, children ) {
 
-				let { type, addonBefore, addonAfter } = this;
+				let { prefixCls, type, addonBefore, addonAfter } = this;
 
 				addonBefore = this.$slots.addonBefore || addonBefore;
 				addonAfter = this.$slots.addonAfter || addonAfter;
@@ -205,7 +208,7 @@
 				);
 			},
 			renderLabeledIcon( createElement, children ) {
-				let { type } = this;
+				let { prefixCls, type } = this;
 
 				let prefix = this.$slots ? this.$slots.prefix : null;
 				let suffix = this.$slots ? this.$slots.suffix : null;

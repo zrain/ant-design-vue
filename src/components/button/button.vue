@@ -10,14 +10,14 @@
 
 <script>
 	import { oneOf } from '../_util/utils';
-	import Icon from '../icon';
-
-	const prefixCls = 'ant-btn';
 
 	export default {
 		name: 'Button',
-		components: { Icon },
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-btn',
+			},
 			type: {
 				type: String,
 			    validator (value) {
@@ -50,7 +50,7 @@
 				type: Boolean,
                 default: false
 			},
-			classNames: String
+			className: String
 		},
 		data() {
 			return {
@@ -63,7 +63,8 @@
 		},
 		computed: {
 			classes () {
-				let { type, shape, size, sizeCls='', showSlot, resultLoading, icon, clicked, ghost, classNames} = this;
+				let { prefixCls, type, shape, size, showSlot, resultLoading, icon, clicked, ghost, className} = this;
+				let sizeCls = '';
 				switch ( size ) {
 				  case 'large':
 				    sizeCls = 'lg';
@@ -83,8 +84,8 @@
 				        [`${prefixCls}-loading`]: resultLoading,
 				        [`${prefixCls}-clicked`]: clicked,
 				        [`${prefixCls}-background-ghost`]: ghost,
+				        [`${className}`]: !!className
 				    },
-				    classNames
 				];
 			}
 		},

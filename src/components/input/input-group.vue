@@ -7,11 +7,13 @@
 <script>
 	import { oneOf } from '../_util/utils';
 
-	const prefixCls = 'ant-input-group';
-
 	export default {
 		name: 'InputGroup',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-input-group',
+			},
 			size: {
 				type: String,
 				validator (value) {
@@ -26,15 +28,16 @@
 		},
 		computed: {
 			classes: function(){
-				let { size, compact, className } = this;
+				let { prefixCls, size, compact, className } = this;
 				return [ 
-					prefixCls, 
+					`${prefixCls}`, 
 					{
 					  	[`${prefixCls}-lg`]: size === 'large',
 					  	[`${prefixCls}-sm`]: size === 'small',
 					  	[`${prefixCls}-compact`]: compact,
+					  	[`${className}`]: !!className
 					}, 
-					className
+					
 				];
 			}
 		}

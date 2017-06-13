@@ -8,20 +8,22 @@
 
 <script>
 
-	const prefixCls = 'ant-layout-content';
-
 	export default {
 		name: 'Content',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-layout-content',
+			},
 			className: String
 		},
 		computed: {
 			classes() {
-				let { className } = this;
+				let { prefixCls, className } = this;
 				return [
 					`${prefixCls}`,
 					{
-						[`${className}`]: className
+						[`${className}`]: !!className
 					},
 				]
 			}

@@ -8,20 +8,22 @@
 
 <script>
 
-	const prefixCls = 'ant-layout-header';
-
 	export default {
 		name: 'Header',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-layout-header',
+			},
 			className: String,
 		},
 		computed: {
 			classes() {
-				let { className } = this;
+				let { prefixCls, className } = this;
 				return [
 					`${prefixCls}`,
 					{
-						[`${className}`]: className
+						[`${className}`]: !!className
 					},
 				]
 			}

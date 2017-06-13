@@ -7,13 +7,13 @@
 <script>
 	import { oneOf, classNames } from '../_util/utils';
 
-	import _ from 'lodash';
-
-	const prefixCls = 'ant-row';
-
 	export default {
 		name: 'Row',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-row',
+			},
 			type: {
 			    validator (value) {
 			        return oneOf(value, ['flex']);
@@ -43,7 +43,7 @@
 		},
 		computed: {
 			classes () {
-				let { type, align, justify, className } = this;
+				let { prefixCls, type, align, justify, className } = this;
 				return [
 				    {
 				        [`${prefixCls}`]: !type,

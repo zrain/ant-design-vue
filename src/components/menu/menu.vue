@@ -6,8 +6,10 @@
 
 <script>
 	import { oneOf } from '../_util/utils';
-	import EventBus from '../eventbus';
+	import Emitter from '../../mixins/emitter.js';
+
 	export default {
+		mixins: [Emitter],
 		name: 'Menu',
 		props: {
 			prefixCls: {
@@ -92,6 +94,9 @@
 					name: e.name,
 				}
 				this.$emit('click', clickEventObject);
+			},
+			broadcastSelectedUpdate(){
+				this.broadcast(['Submenu','MenuItem'],'menu-item-select-update', this.selectedNames);
 			}
 		},
 		computed: {
@@ -107,22 +112,24 @@
 			}
 		},
 		mounted() {
-			EventBus.$on('menu-item-click',( e ) => {
-				this.updateClickName( e );
-				if( !e.name ){
+			this.$on('menu-item-click',( eventObject ) => {
+				this.updateClickName( eventObject );
+				if( !eventObject.name ){
+					console.error(`[ant-design-vue] Cant't find MenuItem.name`)
 					return;
 				}
 				if( this.multiple ){
-					let index = this.selectedNames.findIndex((item) => item === e.name );
+					let index = this.selectedNames.findIndex((item) => item === eventObject.name );
 					if( index != -1 ){
 						this.selectedNames.splice(index,1);
 					}else{
-						this.selectedNames.push(e.name);
+						this.selectedNames.push(eventObject.name);
 					}
 				}else{
-					this.selectedNames.splice(0,1,e.name);
+					this.selectedNames.splice(0,1,eventObject.name);
 				}
-				this.updateSelectName( e );
+				this.updateSelectName( eventObject );
+				this.broadcastSelectedUpdate();
 			})
 		},
 		watch: {
@@ -131,7 +138,7 @@
 				handler: function( newValue, oldValue ){
 					if( newValue.length > 0 ){
 						this.selectedNames = newValue;
-						EventBus.$emit('menu-item-select-update', newValue);
+						this.$emit('menu-item-select-update', newValue);
 					}
 				}
 			}

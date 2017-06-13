@@ -11,9 +11,10 @@
 </template>
 
 <script>
-	import EventBus from '../eventbus';
+	import Emitter from '../../mixins/emitter.js';
 
 	export default {
+		mixins: [Emitter],
 		name: 'MenuItem',
 		props: {
 			prefixCls: {
@@ -48,7 +49,7 @@
 					active: false,
 					selected: false,
 					uniqueKey: '',
-				}
+				},
 			}
 		},
 		methods: {
@@ -61,21 +62,19 @@
 					item: this,
 					domEvent: e,
 				}
-				EventBus.$emit('menu-item-click', eventObject);
+				this.dispatch(['MenuGroup','Submenu','Menu'], 'menu-item-click', eventObject);
 			},
 			handleMouseEnter() {
 				if( this.disabled ){
 					return;
 				}
 				this.state.active = true;
-				// console.info(`[${new Date().getTime()}]`,'handleMouseEnter')
 			},
 			handleMouseLeave() {
 				if( this.disabled ){
 					return;
 				}
 				this.state.active = false;
-				// console.info(`[${new Date().getTime()}]`,'handleMouseLeave')
 			},
 		},
 		computed: {
@@ -100,8 +99,8 @@
 			this.state.uniqueKey = this.name || this.value;
 		},
 		mounted() {
-			EventBus.$on('menu-item-select-update',( selectedtArray ) => {
-				let index = selectedtArray.findIndex((item) => item === this.state.uniqueKey);
+			this.$on('menu-item-select-update',( selectedNames ) => {
+				let index = selectedNames.indexOf( this.state.uniqueKey );
 				if( index != -1 ){
 					this.state.selected = true;
 				}else{

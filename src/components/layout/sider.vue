@@ -42,11 +42,13 @@
 <script>
 	import { oneOf } from '../_util/utils';
 
-	const prefixCls = 'ant-layout-sider';
-
 	export default {
 		name: 'Sider',
 		props: {
+			prefixCls: {
+				type: String,
+				default: 'ant-layout-sider',
+			},
 			collapsible: {
 				type: Boolean,
 				default: false
@@ -134,7 +136,7 @@
 		},
 		computed: {
 			classes() {
-				let { below, trigger, scope_collapsed, collapsedWidth, width, className, siderWidth } = this;
+				let { prefixCls, below, trigger, scope_collapsed, collapsedWidth, width, className, siderWidth } = this;
 
 				return [
 					`${prefixCls}`,
@@ -143,7 +145,7 @@
 						[`${prefixCls}-has-trigger`]: !!trigger,
 						[`${prefixCls}-below`]: !!below,
 						[`${prefixCls}-zero-width`]: siderWidth === 0 || siderWidth === '0',
-						[`${className}`]: className
+						[`${className}`]: !!className
 					},
 				]
 			},
@@ -155,16 +157,19 @@
 				}
 			},
 			childrenClasses() {
+				let prefixCls = this.prefixCls;
 				return [
 					`${prefixCls}-children`
 				]
 			},
 			triggerClasses() {
+				let prefixCls = this.prefixCls;
 				return [
 					`${prefixCls}-trigger`
 				]
 			},
 			zeroWidthTriggerClasses() {
+				let prefixCls = this.prefixCls;
 				return [
 					`${prefixCls}-zero-width-trigger`
 				]
