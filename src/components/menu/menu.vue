@@ -68,6 +68,10 @@
 				type: Boolean,
 				default: false
 			},
+			accordion: {
+				type: Boolean,
+				default: false,
+			},
 			className: {
 				type: String
 			}
@@ -75,9 +79,18 @@
 		data(){
 			return {
 				selectedNames: [],
+				openNames: [],
+				children: {},
+				state: {
+					rootMenu: false,
+					unique: ''
+				}
 			}
 		},
 		methods: {
+			initUnique() {
+				this.state.unique = this.name || this.value || `${new Date().getTime()}${this._uid}`;
+			},
 			updateSelectName( e ) {
 				let selectedEventObject = { 
 					item: e.item, 
@@ -95,27 +108,29 @@
 				}
 				this.$emit('click', clickEventObject);
 			},
-			broadcastSelectedUpdate(){
-				this.broadcast(['Submenu','MenuItem'],'menu-item-select-update', this.selectedNames);
-			}
-		},
-		computed: {
-			classes() {
-				let { prefixCls, theme, mode } = this;
-				return [
-					`${prefixCls}`,
-					`${prefixCls}-${theme}`,
-					{
-					    [`${prefixCls}-${mode}`]: mode
+			isRootMenu() {
+				let parent = this.$parent
+				while( parent ){
+					let name = parent.$options.name;
+					if( name == 'Menu'){
+						this.state.rootMenu = false;
+						return;
 					}
-				]
-			}
-		},
-		mounted() {
-			this.$on('menu-item-click',( eventObject ) => {
+					parent = parent.$parent;
+				}
+				this.state.rootMenu = true;
+			},
+			broadcastMenuItemSelectedUpdate(){
+				console.info('broadcastMenuItemSelectedUpdate')
+				this.broadcast(['Submenu','MenuItem'],'menu-item-select-update', this.selectedNames);
+			},
+			broadcastSubmenuOpenedUpdate(){
+				this.broadcast(['Submenu','MenuItem'], 'submenu-opened-update', this.openNames);
+			},
+			handleMenuItemClick( eventObject ){
+				console.info(eventObject)
 				this.updateClickName( eventObject );
 				if( !eventObject.name ){
-					console.error(`[ant-design-vue] Cant't find MenuItem.name`)
 					return;
 				}
 				if( this.multiple ){
@@ -129,8 +144,68 @@
 					this.selectedNames.splice(0,1,eventObject.name);
 				}
 				this.updateSelectName( eventObject );
-				this.broadcastSelectedUpdate();
+				this.broadcastMenuItemSelectedUpdate();
+			},
+			handleSubmenuClick( eventObject ){
+				if( !eventObject.name ){
+					return;
+				}
+				let index = this.openNames.indexOf( eventObject.name );
+				if( index != -1 ){
+					this.openNames.splice(index,1);
+				}else{
+					if( this.accordion || this.mode == "vertical" ){
+						this.openNames.splice(index,1,eventObject.name)
+					}else{
+						this.openNames.push(eventObject.name);
+					}
+				}
+				
+				this.broadcastSubmenuOpenedUpdate();
+			}
+		},
+		created(){
+			this.initUnique();
+			this.isRootMenu();
+			this.selectedNames = Object.assign([],this.defaultSelectedKeys, this.selectedKeys);
+			this.openNames = Object.assign([], this.defaultOpenKeys, this.openKeys);
+			this.$on('menu-item-click', ( eventObject ) => {
+				console.info('menu-item-click')
+				this.handleMenuItemClick( eventObject );
+			});
+			this.$on('WHO-I-AM', ( children ) => {
+				if( this.children[children.type] ){
+					this.children[children.type].push( children.unique );
+				}else{
+					this.children[children.type] = [children.unique];
+				}
+			});
+			this.$on('submenu-click', ( eventObject ) => {
+				this.handleSubmenuClick(eventObject);
 			})
+		},
+		beforeMount(){
+
+		},
+		computed: {
+			classes() {
+				let { prefixCls, theme, mode } = this;
+				let { rootMenu } = this.state;
+				return [
+					`${prefixCls}`,
+					`${prefixCls}-${theme}`,
+					
+					{
+					    [`${prefixCls}-${mode}`]: mode,
+					    [`${prefixCls}-root`]: rootMenu
+					}
+				]
+			}
+		},
+		mounted(){
+			// broadcats 只能在 mounted 周期触发
+			this.broadcastSubmenuOpenedUpdate();
+			this.broadcastMenuItemSelectedUpdate();
 		},
 		watch: {
 			selectedKeys: {
@@ -138,7 +213,16 @@
 				handler: function( newValue, oldValue ){
 					if( newValue.length > 0 ){
 						this.selectedNames = newValue;
-						this.$emit('menu-item-select-update', newValue);
+						this.broadcastMenuItemSelectedUpdate();
+					}
+				}
+			},
+			openKeys: {
+				deep: true,
+				handler: function( newValue, oldValue ){
+					if( newValue.length > 0 ){
+						this.openNames = newValue;
+						this.broadcastSubmenuOpenedUpdate();
 					}
 				}
 			}

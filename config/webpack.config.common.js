@@ -78,6 +78,18 @@ module.exports = {
 					'less-loader'
 				]
 			},
+			{
+				test: /\.(png|gif|jpg|svg|eot|woff2|woff|ttf|ico)$/,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							limit: 20480,
+							name: 'assets/[name]-[hash].[ext]',
+						},
+					},
+				],
+			},
 		]
 	},
 	plugins: [

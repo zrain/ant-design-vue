@@ -1,7 +1,7 @@
 <style lang="less" scoped>
-	.subnav {
-		box-shadow: none;
-	}
+	// .subnav {
+	// 	box-shadow: none;
+	// }
 	.aside-container {
 		padding-bottom: 50px;
 		font-family: Lato,Helvetica Neue For Number,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Hiragino Sans GB,Microsoft YaHei,Helvetica Neue,Helvetica,Arial,sans-serif;
@@ -14,7 +14,7 @@
 	<div class="components-wrapper">
 		<Row>
 			<Col xs="24" sm="24" md="6" lg="4">
-				<Menu mode="inline" class="subnav aside-container">
+				<!-- <Menu mode="inline" class="subnav aside-container">
 					<MenuItem>Ant Design of Vue</MenuItem>
 					<MenuItem>快速上手</MenuItem>
 					<MenuItem>项目实战</MenuItem>
@@ -61,7 +61,7 @@
 				            </MenuItem>
 				        </MenuItemGroup>
 					</SubMenu>
-				</Menu>
+				</Menu> -->
 			</Col>
 			<Col class="main-container" xs="24" sm="24" md="18" lg="20" >
 				<router-view></router-view>

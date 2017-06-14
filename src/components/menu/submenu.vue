@@ -1,16 +1,21 @@
 <template>
 	<li 
-		:class="classes" 
+		:class="classes"
 		@mouseenter="handleSubmenuMouseEnter" 
 		@mouseleave="handleSubmenuMouseLeave"
+		@click.stop="handleSubmenuCLick"
 	>
 		<Dropdown overlay="dropdown-list">
-			<div :class="submenuTitleClasses">
+			<div 
+				:class="submenuTitleClasses"
+				:style="styles"
+			>
 				<slot name="title">{{title}}</slot>
 			</div>
 		</Dropdown>
 		<ul 
 			:class="submenuUlClasses"
+
 			ref="dropdown-list">
 			<slot></slot>
 		</ul>
@@ -18,7 +23,10 @@
 </template>
 
 <script>
+	import Emitter from '../../mixins/emitter.js';
+
 	export default {
+		mixins: [Emitter],
 		name: 'Submenu',
 		props: {
 			prefixCls: {
@@ -47,7 +55,6 @@
 		},
 		data() {
 			return {
-				mode: '',
 				rootPrefixCls: '',
 				timeout: null,
 				childrenItem: {},
@@ -55,61 +62,139 @@
 					opened: false,
 					active: false,
 					selected: false,
-				}
+					rootMode: '',
+					rootInlineIndent: 0,
+					unique: '',
+					level: 1,
+				},
+				children: {},
 			}
 		},
 		methods: {
-			syncMode() {
-				if( this.$parent ){
-					this.mode = this.$parent.mode;
+			initUnique() {
+				this.state.unique = this.name || this.value || `${new Date().getTime()}${this._uid}`;
+			},
+			calcLevel() {
+				let parent = this.$parent;
+				while( parent ){
+					let name = parent.$options.name;
+					if( name == 'Submenu'){
+						this.state.level++;
+					}
+					if( name == 'Menu' ){
+						return;
+					}
+					parent = parent.$parent;
+				}
+			},
+			syncRootMode() {
+				let parent = this.$parent;
+				while( parent ){
+					let name = parent.$options.name;
+					if( name == 'Menu'){
+						this.state.rootMode = parent.mode;
+						this.state.rootInlineIndent = parent.inlineIndent;
+						return;
+					}
+					parent = parent.$parent;
 				}
 			},
 			syncRootPrefixCls() {
-				if( this.$parent && 
-					this.$parent.$options && 
-					this.$parent.$options._componentTag == 'Menu' ){
-					this.rootPrefixCls = this.$parent.prefixCls;
+				let parent = this.$parent;
+				while( parent ){
+					let name = parent.$options.name;
+					if( name == 'Menu'){
+						this.rootPrefixCls = parent.prefixCls;
+						return;
+					}
+					parent = parent.$parent;
 				}
 			},
 			handleSubmenuMouseEnter() {
 				if( this.timeout ){
 					window.clearTimeout(this.timeout);
 				}
-				this.state.opened = true;
-				this.state.active = true;
+				if( this.state.rootMode != 'inline' ){
+					this.state.active = true;
+				}
+				if( this.state.rootMode == 'horizontal' ){
+					this.state.opened = true;
+				}
 			},
 			handleSubmenuMouseLeave() {
 				this.timeout = window.setTimeout(() => {
-					this.state.opened = false;
 					this.state.active	= false;
+					if( this.state.rootMode == 'horizontal' ){
+						this.state.opened = false;
+					}
 				},300)
-			},
-			handleMenuItemClick( eventObject ) {
-				this.childrenItem[ eventObject.name ] = eventObject;
 			},
 			handleMenuItemSelectUpdate( selectedNames ) {
 				let flag = false;
 				selectedNames.forEach((item) => {
-					if( this.childrenItem[item] ){
+					let index = this.children['MenuItem'].indexOf(item)
+					if( index != -1 ){
 						flag = true;
 					}
 				});
-				this.selected = flag;
+				this.state.selected = flag;
+			},
+			handleSubmenuCLick(e){
+				if( this.disabled ){
+					return;
+				}
+				let eventObject = {
+					name: this.state.unique,
+					item: this,
+					domEvent: e,
+				}
+				this.dispatch(['Menu'], 'submenu-click', eventObject);
+			},
+			handleSubmenuOpenedUpdate( openedNames ){
+				let index = openedNames.indexOf( this.state.unique );
+				if( index != -1 ){
+					this.state.opened = true;
+				}else{
+					this.state.opened = false;
+				}
 			}
 		},
+		created() {
+			this.initUnique();
+			this.$on('WHO-I-AM',( children ) => {
+				if( this.children[children.type] ){
+					this.children[children.type].push( children.unique );
+				}else{
+					this.children[children.type] = [children.unique];
+				}
+			});
+			this.dispatch(['Menu'],'WHO-I-AM',{
+				type: 'Submenu',
+				unique: this.state.unique,
+			});
+
+			this.$on('menu-item-select-update',(selectedNames) => {
+				this.handleMenuItemSelectUpdate(selectedNames)
+			});
+
+			this.$on('submenu-opened-update',(openedNames) => {
+				this.handleSubmenuOpenedUpdate(openedNames)
+			})
+		},
 		beforeMount() {
-			this.syncMode();
+			this.calcLevel();
+			this.syncRootMode();
 			this.syncRootPrefixCls();
 		},
 		computed: {
 			classes() {
-				let { prefixCls, className, mode, disabled } = this;
-				let { opened, active, selected } = this.state;
+				let { prefixCls, className, disabled } = this;
+				let { opened, active, selected, rootMode } = this.state;
 				return [
 					`${prefixCls}`,
 					{
 						[`${className}`]: className,
-						[`${prefixCls}-${mode}`]: mode,
+						[`${prefixCls}-${rootMode}`]: rootMode,
 						[`${prefixCls}-open`]: opened,
 						[`${prefixCls}-active`]: active,
 						[`${prefixCls}-disabled`]: disabled,
@@ -121,30 +206,30 @@
 				return [`${this.prefixCls}-title`];
 			},
 			submenuUlClasses() {
-				let { rootPrefixCls, mode } = this;
-				let { opened } = this.state;
+				let { rootPrefixCls } = this;
+				let { opened, rootMode } = this.state;
 				return [
 					`${rootPrefixCls}`,
 					{
-						[`${rootPrefixCls}-vertical`]: mode,
+						[`${rootPrefixCls}-vertical`]: rootMode == 'horizontal',
+						[`${rootPrefixCls}-horizontal`]: rootMode == 'vertical',
+						[`${rootPrefixCls}-inline`]: rootMode == 'inline',
 						[`${rootPrefixCls}-sub`]: true,
-						[`${rootPrefixCls}-hidden`]: !opened
+						[`${rootPrefixCls}-hidden`]: !opened,
 					}
 				];
+			},
+			styles() {
+				let paddingLeft = this.state.rootInlineIndent * this.state.level;
+				return {
+					'padding-left': paddingLeft +'px'
+				}
 			}
 		},
 		updated() {
-			this.syncMode();
+			this.initUnique();
+			this.syncRootMode();
+			this.syncRootPrefixCls();
 		},
-		mounted() {
-
-			this.$on('menu-item-click',(eventObjct) => {
-				this.handleMenuItemClick(eventObjct);
-			});
-
-			this.$on('menu-item-select-update',(selectedNames) => {
-				this.handleMenuItemSelectUpdate(selectedNames)
-			});
-		}
 	}
 </script>

@@ -44,7 +44,7 @@
 				<Col :xs="24" :sm="24" :md="5" :lg="4"></Col>
 				<Col :xs="0" :sm="0" :md="19" :lg="20">
 					<Button class="lang" size="small">EN</Button>
-					<Menu 
+					<!-- <Menu 
 						class="nav"
 						mode="horizontal"
 					>
@@ -53,7 +53,7 @@
 						<MenuItem name="components">组件</MenuItem>
 						<MenuItem name="patterns">模式</MenuItem>
 						<MenuItem name="resources">资源</MenuItem>
-					</Menu>
+					</Menu> -->
 				</Col>
 			</Row>
 		</Header>
