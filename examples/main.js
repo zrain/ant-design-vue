@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import App from './routers/app.vue';
+import App from './container/app.container.vue';
 
 import Ant_Design_Vue from '../src/components';
 
@@ -16,7 +16,7 @@ Vue.use(Ant_Design_Vue);
 const routes = [
 	{
 		path: '/components',
-		component: require('./routers/components.demo.vue'),
+		component: require('./container/component.container.vue'),
 		children: [
 			{
 				path: 'button',
@@ -43,6 +43,10 @@ const routes = [
 				component: require('./routers/domAlign.demo.vue'),
 			},
 		]
+	},
+	{
+		path: '*',
+		redirect: '/components' 
 	},
 	
 ]
