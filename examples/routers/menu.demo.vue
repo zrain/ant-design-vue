@@ -171,8 +171,6 @@
 			<section class="code-box">
 				<section class="code-box-demo">
 					<Menu style="width:240px;"
-					        :defaultSelectedKeys="['1']"
-					        :defaultOpenKeys="['sub1']"
 					        mode="vertical"
 					      >
 				        <SubMenu value="sub1">
@@ -215,10 +213,10 @@
 				</section>
 				<section class="code-box-meta markdown">
 					<div class="code-box-title">
-						<a href="#">内嵌菜单</a>
+						<a href="#">垂直菜单</a>
 					</div>
 					<div>
-						<p>垂直菜单，子菜单内嵌在菜单区域。</p>
+						<p>子菜单是弹出的形式。</p>
 					</div>
 				</section>
 			</section>

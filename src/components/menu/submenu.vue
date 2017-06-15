@@ -117,17 +117,17 @@
 				if( this.state.rootMode != 'inline' ){
 					this.state.active = true;
 				}
-				if( this.state.rootMode == 'horizontal' ){
-					this.state.opened = true;
+				if( this.state.rootMode != 'inline' ){
+					this.handleSubmenuCLick();
 				}
 			},
 			handleSubmenuMouseLeave() {
 				this.timeout = window.setTimeout(() => {
 					this.state.active	= false;
-					if( this.state.rootMode == 'horizontal' ){
+					if( this.state.rootMode != 'inline' ){
 						this.state.opened = false;
 					}
-				},300)
+				},100)
 			},
 			handleMenuItemSelectUpdate( selectedNames ) {
 				let flag = false;
@@ -211,8 +211,7 @@
 				return [
 					`${rootPrefixCls}`,
 					{
-						[`${rootPrefixCls}-vertical`]: rootMode == 'horizontal',
-						[`${rootPrefixCls}-horizontal`]: rootMode == 'vertical',
+						[`${rootPrefixCls}-vertical`]: rootMode != 'inline',
 						[`${rootPrefixCls}-inline`]: rootMode == 'inline',
 						[`${rootPrefixCls}-sub`]: true,
 						[`${rootPrefixCls}-hidden`]: !opened,
